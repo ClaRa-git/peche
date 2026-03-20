@@ -21,8 +21,13 @@ grails:
                 bcrypt:
                     logrounds: 10
             rest:
+                login:
+                    endpointUrl: '/api/auth/login'
+                logout:
+                    endpointUrl: '/api/auth/logout'
                 token:
                     storage:
+                        useGorm: false
                         jwt:
                             secret: 'peche3000_secret_jwt_key_must_be_long_enough_32chars'
             controllerAnnotations:

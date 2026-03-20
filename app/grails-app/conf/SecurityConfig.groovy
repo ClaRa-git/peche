@@ -12,6 +12,12 @@ security {
         className = 'app.Role'
     }
     rest {
+        login {
+            endpointUrl = '/api/auth/login'
+        }
+        logout {
+            endpointUrl = '/api/auth/logout'
+        }
         token {
             storage {
                 useGorm = false  // on utilise JWT stateless, pas de BDD pour les tokens
