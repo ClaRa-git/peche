@@ -61,6 +61,7 @@ dependencies {
     implementation "org.apache.grails:grails-data-hibernate5"
     implementation "org.apache.grails:grails-gsp"
     implementation "org.postgresql:postgresql:42.7.7"
+    implementation "org.apache.grails:grails-spring-security-rest:7.0.1"
     integrationTestImplementation testFixtures("org.apache.grails:grails-geb")
     profile "org.apache.grails.profiles:web"
     runtimeOnly "org.fusesource.jansi:jansi"

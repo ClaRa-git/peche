@@ -1,9 +1,9 @@
 package app
 
-import grails.testing.web.controllers.ControllerUnitTest
+import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class FirstControllerSpec extends Specification implements ControllerUnitTest<FirstController> {
+class OrderSpec extends Specification implements DomainUnitTest<Order> {
 
     def setup() {
     }

@@ -33,7 +33,7 @@ services:
       - ./app:/app
       #- ./sdkG:/root/.sdkman/candidates/grails/current
     environment:
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=postgresgrails
       - POSTGRES_PORT=5432
       - POSTGRES_DB=cfadb
       - POSTGRES_USER=cfa
