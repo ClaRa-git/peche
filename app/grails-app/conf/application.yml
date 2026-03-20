@@ -5,15 +5,21 @@ grails:
         defaultPackage: app
     gorm:
         reactor:
-            # Whether to translate GORM events into Reactor events
-            # Disabled by default for performance reasons
             events: false
     plugin:
         springsecurity:
             userLookup:
-                userDomainClassName: app.AppUser
-                usernamePropertyName: email
-                passwordPropertyName: passwordHash
+                userDomainClassName: 'app.AppUser'
+                usernamePropertyName: 'email'
+                passwordPropertyName: 'passwordHash'
+                authoritiesPropertyName: 'authorities'
+                authorityJoinClassName: 'app.AppUserRole'
+            authority:
+                className: 'app.Role'
+            password:
+                algorithm: bcrypt
+                bcrypt:
+                    logrounds: 10
             rest:
                 token:
                     storage:
@@ -21,19 +27,49 @@ grails:
                             secret: 'peche3000_secret_jwt_key_must_be_long_enough_32chars'
             controllerAnnotations:
                 staticRules:
+                    - pattern: /
+                      access: ['permitAll']
+                    - pattern: /error
+                      access: ['permitAll']
+                    - pattern: /assets/**
+                      access: ['permitAll']
+                    - pattern: /**/js/**
+                      access: ['permitAll']
+                    - pattern: /**/css/**
+                      access: ['permitAll']
+                    - pattern: /**/images/**
+                      access: ['permitAll']
+                    - pattern: /**/favicon.ico
+                      access: ['permitAll']
                     - pattern: '/api/auth/**'
-                      access: [ 'permitAll' ]
+                      access: ['permitAll']
                     - pattern: '/api/admin/**'
-                      access: [ 'ROLE_ADMIN' ]
+                      access: ['ROLE_ADMIN']
                     - pattern: '/api/**'
-                      access: [ 'isAuthenticated()' ]
+                      access: ['isAuthenticated()']
                     - pattern: '/**'
-                      access: [ 'permitAll' ]
+                      access: ['permitAll']
+            filterChain:
+                chainMap:
+                    - pattern: /assets/**
+                      filters: none
+                    - pattern: /**/js/**
+                      filters: none
+                    - pattern: /**/css/**
+                      filters: none
+                    - pattern: /**/images/**
+                      filters: none
+                    - pattern: /**/favicon.ico
+                      filters: none
+                    - pattern: /**
+                      filters: JOINED_FILTERS
+
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
+
 spring:
     jmx:
         unique-names: true
@@ -51,19 +87,11 @@ spring:
                 - '**/*.gson'
                 - 'logback-spring.xml'
                 - '*.properties'
-environments:
-    development:
-        management:
-            endpoints:
-                enabled-by-default: true
-                web:
-                    base-path: '/actuator'
-                    exposure:
-                        include: '*'
-    production:
-        management:
-            endpoints:
-                enabled-by-default: false
+
+logging:
+    level:
+        org.springframework.security: DEBUG
+        grails.plugin.springsecurity: DEBUG
 
 ---
 grails:
@@ -83,22 +111,22 @@ grails:
             csv: text/csv
             form: application/x-www-form-urlencoded
             html:
-              - text/html
-              - application/xhtml+xml
+                - text/html
+                - application/xhtml+xml
             js: text/javascript
             json:
-              - application/json
-              - text/json
+                - application/json
+                - text/json
             multipartForm: multipart/form-data
             pdf: application/pdf
             rss: application/rss+xml
             text: text/plain
             hal:
-              - application/hal+json
-              - application/hal+xml
+                - application/hal+json
+                - application/hal+xml
             xml:
-              - text/xml
-              - application/xml
+                - text/xml
+                - application/xml
     urlmapping:
         cache:
             maxsize: 1000
@@ -124,6 +152,7 @@ hibernate:
         queries: false
         use_second_level_cache: false
         use_query_cache: false
+
 dataSource:
     pooled: true
     url: jdbc:postgresql://postgresgrails:5432/cfadb
@@ -140,10 +169,6 @@ environments:
             logSql: true
             formatSql: true
             url: jdbc:postgresql://postgresgrails:5432/cfadb
-    logging:
-        level:
-            org.springframework.security: DEBUG
-            grails.plugin.springsecurity: DEBUG
     test:
         dataSource:
             dbCreate: update
@@ -169,53 +194,4 @@ environments:
                 testWhileIdle: true
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
-                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
-
----
-# Added by the Spring Security Core plugin:
-grails:
-    plugin:
-        springsecurity:
-            userLookup:
-                userDomainClassName: 'app.AppUser'
-                authorityJoinClassName: 'app.AppUserRole'
-        authority:
-            className: 'app.Role'
-            controllerAnnotations:
-                staticRules:
-                    - pattern: /
-                      access: ['permitAll']
-                    - pattern: /error
-                      access: ['permitAll']
-                    - pattern: /index
-                      access: ['permitAll']
-                    - pattern: /index.gsp
-                      access: ['permitAll']
-                    - pattern: /shutdown
-                      access: ['permitAll']
-                    - pattern: /assets/**
-                      access: ['permitAll']
-                    - pattern: /**/js/**
-                      access: ['permitAll']
-                    - pattern: /**/css/**
-                      access: ['permitAll']
-                    - pattern: /**/images/**
-                      access: ['permitAll']
-                    - pattern: /**/favicon.ico
-                      access: ['permitAll']
-
-            filterChain:
-                chainMap:
-                    - pattern: /assets/**
-                      filters: none
-                    - pattern: /**/js/**
-                      filters: none
-                    - pattern: /**/css/**
-                      filters: none
-                    - pattern: /**/images/**
-                      filters: none
-                    - pattern: /**/favicon.ico
-                      filters: none
-                    - pattern: /**
-                      filters: JOINED_FILTERS
-
+                defaultTransactionIsolation: 2

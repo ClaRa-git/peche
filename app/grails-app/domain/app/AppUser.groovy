@@ -10,9 +10,9 @@ class AppUser {
     String phone
     String address
     Boolean enabled = true
-    Boolean account_expired = false
-    Boolean account_locked = false
-    Boolean password_expired = false
+    Boolean accountExpired = false
+    Boolean accountLocked = false
+    Boolean passwordExpired = false
     Date createdAt = new Date()
 
     // Récupère les rôles via AppUserRole pour Spring Security
@@ -37,8 +37,8 @@ class AppUser {
         lastName     column: 'last_name'
         createdAt    column: 'created_at'
         enabled         column: 'enabled'
-        account_expired  column: 'account_expired'
-        account_locked   column: 'account_locked'
-        password_expired column: 'password_expired'
+        accountExpired  column: 'account_expired'
+        accountLocked   column: 'account_locked'
+        passwordExpired column: 'password_expired'
     }
 }
